@@ -24,7 +24,9 @@ AIRODUMP_FILE_PREFIX = "full_airodump_file"
 # Learn more at https://www.metageek.com/training/resources/understanding-rssi.html
 AIRODUMP_MIN_POWER = os.environ.get("AIRODUMP_MIN_POWER", default=-70)
 
-DISABLE_AUTO_TITLE = os.environ.get("DISABLE_AUTO_TITLE", default="False") in TRUTH_STRINGS
+DISABLE_AUTO_TITLE = (
+    os.environ.get("DISABLE_AUTO_TITLE", default="False") in TRUTH_STRINGS
+)
 
 SUDO_PWD = os.environ.get("SUDO_PWD", default="")
 

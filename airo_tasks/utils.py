@@ -11,7 +11,11 @@ logger = logging.getLogger(__name__)
 
 
 def run_cmd_and_check_response(
-        command: str, success_match: str, failure_matches: List[str], sudo_pwd: str = None, timeout: int = 5 
+    command: str,
+    success_match: str,
+    failure_matches: List[str],
+    sudo_pwd: str = None,
+    timeout: int = 5,
 ) -> bool:
     """This method uses pexpect to talk us through a process interaction and checks the response.
     Optionally adds a sudo interaction beforehand."""
@@ -32,10 +36,16 @@ def run_cmd_and_check_response(
         print(child.before, end=" ")
         child.interact()
     elif index <= len(failure_matches):
-        logger.error("%s Problem running command %s: %s" % (settings.TERM_LBL, command, failure_matches[index - 1]))
+        logger.error(
+            "%s Problem running command %s: %s"
+            % (settings.TERM_LBL, command, failure_matches[index - 1])
+        )
         return False
     else:
-        logger.error("%s Problem running command %s: No expected reply." % (settings.TERM_LBL, command))
+        logger.error(
+            "%s Problem running command %s: No expected reply."
+            % (settings.TERM_LBL, command)
+        )
         return False
     return True
 
@@ -62,8 +72,9 @@ def find_interface(interfaces: List[str]) -> str:
         else:
             found_interface = interface
     if found_interface is None:
-        logger.error("%s Error: the interfaces you specified (%s) cannot be found. Available interfaces: %s\n Maybe tweak the setting WIFI_INTERFACES ..." % (settings.TERM_LBL, interfaces, net_interfaces()))
+        logger.error(
+            "%s Error: the interfaces you specified (%s) cannot be found. Available interfaces: %s\n Maybe tweak the setting WIFI_INTERFACES ..."
+            % (settings.TERM_LBL, interfaces, net_interfaces())
+        )
         exit(2)
     return found_interface
-
-

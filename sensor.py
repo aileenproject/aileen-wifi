@@ -17,6 +17,7 @@ def check_preconditions():
     logger.info("Checking preconditions ...")
     find_interface(settings.WIFI_INTERFACES)
 
+
 def start_sensing(tmp_path: str = None):
     """ Start the airomon daemon """
     out_path = os.path.join(tmp_path, settings.AIRODUMP_FILE_PREFIX)
@@ -33,6 +34,7 @@ def start_sensing(tmp_path: str = None):
         % (wifi_interface_used, out_path)
     )
 
+
 def get_latest_reading_as_df(tmp_path: str = None):
     """
     Return the latest reading in the dataframe format required by Aileen-core.
@@ -40,21 +42,29 @@ def get_latest_reading_as_df(tmp_path: str = None):
     Will ignore readings with too little power.
     """
     df = read_airodump_csv_and_return_df(
-            tmp_path,
-            settings.AIRODUMP_FILE_PREFIX,
-            settings.AIRODUMP_MIN_POWER
-        )
+        tmp_path, settings.AIRODUMP_FILE_PREFIX, settings.AIRODUMP_MIN_POWER
+    )
     df = df.rename(columns={"device_id": "observable_id"})
     df = df.rename(columns={"device_power": "value"})
     # collect observations
     obs_names = ["access_point_id", "total_packets", "access_point_id"]
     obs_vals = df[obs_names].T.to_dict()
     df["Mapper"] = df.index
-    df = df.assign(observations=df.Mapper.map(obs_vals)).drop("Mapper", 1).drop(obs_names, 1)
+    df = (
+        df.assign(observations=df.Mapper.map(obs_vals))
+        .drop("Mapper", 1)
+        .drop(obs_names, 1)
+    )
     return df
 
-def adjust_event(event_value: int, last_event_value: int, observations: dict, last_observations: dict, device)\
-    -> Tuple[int, dict]:
+
+def adjust_event(
+    event_value: int,
+    last_event_value: int,
+    observations: dict,
+    last_observations: dict,
+    device,
+) -> Tuple[int, dict]:
     """
     Adjust event data dynamically, if needed.
     Returns updated event value and observations.

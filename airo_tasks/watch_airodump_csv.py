@@ -42,6 +42,7 @@ def parse_airomon_datetime(airomon_dt: str) -> datetime:
 
     return dt
 
+
 def get_device_data_from_csv_file(csv_filename: str, min_power: int) -> pd.DataFrame:
     """Read in the data frame and use only the columns which contain device info"""
     try:
@@ -96,20 +97,35 @@ def get_device_data_from_csv_file(csv_filename: str, min_power: int) -> pd.DataF
     for d_name, d_mac in settings.DEBUG_DEVICES.items():
         if d_mac in df.device_id.values:
             pd_row = df.loc[df.device_id == d_mac]
-            last_seen = pd_row.time_seen.values[0].astype('M8[ms]').astype('O').replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
+            last_seen = (
+                pd_row.time_seen.values[0]
+                .astype("M8[ms]")
+                .astype("O")
+                .replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
+            )
             last_seen_seconds_ago = (
                 datetime.now(pytz.timezone(settings.TIME_ZONE)) - last_seen
             ).seconds
             logger.info(
                 "%s %s signal: %s, last seen: %s seconds ago"
-                % (settings.TERM_LBL, d_name, pd_row.device_power.values[0], last_seen_seconds_ago)
+                % (
+                    settings.TERM_LBL,
+                    d_name,
+                    pd_row.device_power.values[0],
+                    last_seen_seconds_ago,
+                )
             )
 
     # filter out events with too weak signal
     df_signal = df[df["device_power"] <= min_power]
     logger.info(
         "%s %d events (out of %d) had a signal weaker than the minimum power (%d )"
-        % (settings.TERM_LBL, len(df.index) - len(df_signal.index), len(df.index), min_power)
+        % (
+            settings.TERM_LBL,
+            len(df.index) - len(df_signal.index),
+            len(df.index),
+            min_power,
+        )
     )
 
     return df_signal

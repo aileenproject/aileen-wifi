@@ -20,7 +20,7 @@ def put_wifi_interface_in_monitor_mode(
     run_cmd_and_check_response(
         "%s start %s" % (path_to_airmon_ng, interface),
         "PHY",
-        #["processes that could cause trouble", "Run it as root"],
+        # ["processes that could cause trouble", "Run it as root"],
         ["Run it as root"],
         sudo_pwd,
     )
@@ -46,7 +46,9 @@ def start_airodump(
         airodump_file_name_prefix,
         log_interval_in_seconds,
     )
-    run_cmd_and_check_response(command, "BSSID", ["No such device", "Operation not permitted"] , sudo_pwd)
+    run_cmd_and_check_response(
+        command, "BSSID", ["No such device", "Operation not permitted"], sudo_pwd
+    )
 
 
 def start(
@@ -65,7 +67,10 @@ def start(
         wifi_interface = put_wifi_interface_in_monitor_mode(
             wifi_interface, airmon_ng_path, sudo_pwd
         )
-        logging.info("%s Monitor mode activated for wifi interface: '%s'" % (settings.TERM_LBL, wifi_interface))
+        logging.info(
+            "%s Monitor mode activated for wifi interface: '%s'"
+            % (settings.TERM_LBL, wifi_interface)
+        )
         start_airodump(
             wifi_interface,
             airodump_path,
@@ -80,5 +85,3 @@ def start(
         logging.error("%s Problem: %s" % (settings.TERM_LBL, e))
         exit(2)
     return wifi_interface
-
-
