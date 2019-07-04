@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def put_wifi_interface_in_monitor_mode(
     interface: str, path_to_airmon_ng: str, sudo_pwd: str = None
 ) -> str:
-    """Run airmon-ng on this wifi interface. Airmon-ng usually changes the name, so we return the new one."""
+    """Run airmon-ng to start this wifi interface. Airmon-ng usually changes the name, so we return the new one."""
     interfaces_before = net_interfaces()
     run_cmd_and_check_response(
         "%s start %s" % (path_to_airmon_ng, interface),
@@ -30,6 +30,18 @@ def put_wifi_interface_in_monitor_mode(
         return interface
     else:
         return list(set(interfaces_after) - set(interfaces_before))[0]
+
+
+def stop_interface_from_being_monitored(
+    interface: str, path_to_airmon_ng: str, sudo_pwd: str = None
+) -> str:
+    """Run airmon-ng to stop this wifi interface. """
+    run_cmd_and_check_response(
+        "%s stop %s" % (path_to_airmon_ng, interface),
+        "PHY",
+        ["Run it as root"],
+        sudo_pwd,
+    )
 
 
 def start_airodump(
@@ -62,8 +74,18 @@ def start(
     """Start airodump, be sure airomon monitors the right interface beforehand.
     Return interface name actually being used."""
     wifi_interface = None
+    wifi_interfaces = wifi_interfaces.split(",") 
     try:
-        wifi_interface = find_interface(wifi_interfaces.split(","))
+        # This trick is handy if the card was already in monitor mode (e.g. if Aileen restarts this sensor)
+        if find_interface(settings.WIFI_INTERFACES, escalate=False) is None:
+            interfaces_visible = net_interfaces()
+            if len(interfaces_visible) > 0:
+                stop_interface_from_being_monitored(
+                    interfaces_visible[-1],
+                    settings.FULL_PATH_TO_AIRMON_NG,
+                    settings.SUDO_PWD)
+
+        wifi_interface = find_interface(wifi_interfaces)
         wifi_interface = put_wifi_interface_in_monitor_mode(
             wifi_interface, airmon_ng_path, sudo_pwd
         )

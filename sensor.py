@@ -21,6 +21,7 @@ def check_preconditions():
 def start_sensing(tmp_path: str = None):
     """ Start the airomon daemon """
     out_path = os.path.join(tmp_path, settings.AIRODUMP_FILE_PREFIX)
+    
     wifi_interface_used = start(
         settings.SUDO_PWD,
         settings.FULL_PATH_TO_AIRMON_NG,

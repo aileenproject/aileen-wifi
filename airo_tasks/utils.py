@@ -20,7 +20,7 @@ def run_cmd_and_check_response(
     """This method uses pexpect to talk us through a process interaction and checks the response.
     Optionally adds a sudo interaction beforehand."""
     if sudo_pwd is not None and sudo_pwd != "":
-        print('Attempting to run command "%s" with sudo.' % command)
+        logger.debug("%s Attempting to run command\"%s\" with sudo." % (settings.TERM_LBL, command))
         child = pexpect.spawn("sudo %s" % command, timeout=timeout)
         index = child.expect(["password for %s:" % getuser(), pexpect.TIMEOUT])
         if index > 0:
@@ -50,7 +50,7 @@ def run_cmd_and_check_response(
     return True
 
 
-def find_interface(interfaces: List[str]) -> str:
+def find_interface(interfaces: List[str], escalate: bool = True) -> str:
     """Find out if one of the possible network interfaces is indeed present.
     Return the first one found or exit (with a message) if none can be found.
     We are trying to deal with a renaming that Airmon sometimes does (adding "mon")
@@ -71,7 +71,7 @@ def find_interface(interfaces: List[str]) -> str:
                 found_interface = monitoring_interface
         else:
             found_interface = interface
-    if found_interface is None:
+    if found_interface is None and escalate:
         logger.error(
             "%s Error: the interfaces you specified (%s) cannot be found. Available interfaces: %s\n Maybe tweak the setting WIFI_INTERFACES ..."
             % (settings.TERM_LBL, interfaces, net_interfaces())
