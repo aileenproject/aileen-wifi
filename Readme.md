@@ -11,7 +11,7 @@ We used this:
 - ALFA AWUS036NH HIGH POWER WIFI USB-ADAPTER
 - Computer running Ubuntu 18.04 LTS (the picture below is an Intel NUC)
 
-![We used an Intel NUC](aileen-box.jpg)
+![We used an Intel NUC](aileen-box-small.jpg)
 
 ## Dependencies
 
