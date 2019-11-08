@@ -117,7 +117,7 @@ def get_device_data_from_csv_file(csv_filename: str, min_power: int) -> pd.DataF
             )
 
     # filter out events with too weak signal
-    df_signal = df[df["device_power"] <= min_power]
+    df_signal = df[df["device_power"] >= min_power]
     logger.info(
         "%s %d events (out of %d) had a signal weaker than the minimum power (%d )"
         % (

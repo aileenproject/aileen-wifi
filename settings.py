@@ -34,5 +34,5 @@ TERM_LBL = "[Aileen-Wifi]"
 
 TIME_ZONE = os.environ.get("TIME_ZONE", "Europe/Amsterdam")
 
-# This is a dict with labels of your choice as keys and observable IDs as values, e.g. {"hans": "4234q234q234"}.
+# This is a dict with labels of your choice as keys and device IDs as values, e.g. {"hans": "4234q234q234"}.
 DEBUG_DEVICES = {}
