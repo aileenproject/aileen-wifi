@@ -9,7 +9,9 @@ Aileen, a hardware/software suite designed for NGOs, counts signals from devices
 We used this:
 
 - ALFA AWUS036NH HIGH POWER WIFI USB-ADAPTER
-- Computer running Ubuntu 18.04 LTS
+- Computer running Ubuntu 18.04 LTS (the picture below is an Intel NUC)
+
+![We used an Intel NUC](aileen-box.jpg)
 
 ## Dependencies
 
@@ -17,7 +19,6 @@ We used this:
 - Activate it, e.g: `source env_aileen/bin/activate`
 - Install the `aileen` dependencies:
   `python setup.py develop`
-   # TODO: how to separate?
 - If you want to collaborate on code, please install pre-commit for it to hook into commits:
   `pre-commit install`
 - TODO: Maybe run installation script? 
