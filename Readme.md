@@ -2,6 +2,8 @@
 
 Aileen, a hardware/software suite designed for NGOs, counts signals from devices with a wireless interface enabled (such as smartphones) to deliver population data in an organized and actionable format.
 
+![Server dashboard](aileen-dashboard.png)
+
 ## Hardware
 
 We used this:
